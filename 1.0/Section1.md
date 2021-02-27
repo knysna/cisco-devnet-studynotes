@@ -1,16 +1,85 @@
 # 1.0 Software Development and Design
 
 ## 1.1 Compare data formats (XML, JSON, and YAML)
-|Attribute      | XML                    | JSON          | YAML          |
-|----           |----                    |----           |----           |
-|Human Readable |Worst                   |Good           |Best           |
+|Attribute                                  | XML                    | JSON          | YAML          |
+|----                                       |----                    |----           |----           |
+|Human Readable                         |Worst                   |Good           |Best           |
 |Size (storage/bandwidth)                |Largest        |Smaller        |Smaller        |
-|Parse-ability  |Parser/Schema needed    |Native         |OK             |
-|Backward compatibility|Best             |OK             |Worst          |
+|Parse-ability                      |Parser/Schema needed    |Native         |OK             |
+|Backward compatibility             |Best             |OK             |Worst          |
+|Additional comments                |No                  |No             |Yes (#)           |
 
 
 ## 1.2 Describe parsing of common data format (XML, JSON, and YAML) to Python data structures
- 
+#### XML using xmltodict
+```
+https://www.kite.com/python/docs/xmltodict.parse
+>>> import xmltodict
+>>> doc = xmltodict.parse("""
+... <a prop="x">
+...   <b>1</b>
+...   <b>2</b>
+... </a>
+... """)
+>>> doc['a']['@prop']
+u'x'
+>>> doc['a']['b']
+[u'1', u'2']
+```
+#### XML using ElementTree
+````
+https://www.datacamp.com/community/tutorials/python-xml-elementtree
+import xml.etree.ElementTree as ET
+
+tree = ET.parse('movies.xml')
+root = tree.getroot()
+
+for movie in root.iter('movie'):
+    print(movie.attrib)
+
+````
+#### JSON using json
+```
+https://www.w3schools.com/python/python_json.asp
+import json
+
+# some JSON:
+x =  '{ "name":"John", "age":30, "city":"New York"}'
+
+# parse x:
+y = json.loads(x)
+
+# the result is a Python dictionary:
+print(y["age"])
+```
+
+#### YAML using pyyaml
+note the pip installer is called 'pyYAML' but the imported module is 'yaml'    
+
+myfile.yaml
+```
+---
+access_token: hungryhungryhippos
+expires_in: 12055933
+refresh_token: someotherlongcomplexstring
+refreshtokenexpires_in: 3435235
+
+```
+
+
+```
+import yaml
+
+yaml_file = open("myfile.yaml", "r")
+
+pythondata = yaml.safe_load(yaml_file)
+
+print(pythondata['expires_in'])
+print("The access token from YAML is: %s" % pythondata['access_token'])
+
+```
+
+
 ## 1.3 Describe the concepts of test-driven development
  
 ## 1.4 Compare software development methods (agile, lean, and waterfall)
