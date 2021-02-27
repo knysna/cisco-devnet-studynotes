@@ -81,8 +81,28 @@ print("The access token from YAML is: %s" % pythondata['access_token'])
 
 
 ## 1.3 Describe the concepts of test-driven development
+* Basically, define a test first then write code that will pass the test
+* Python library 'unittest'
+    * Run 'pythom -m unittest' and get nice pass/fail output
+* Python library 'pytest'
+    * Assert that if you put value X into a function, the function will return value Y every time
+* Run the tests whenever changes are made
+* Cisco's Python library 'pyACS' is something different, covered in later section, simulates a network for testing against
  
 ## 1.4 Compare software development methods (agile, lean, and waterfall)
+#### Waterfall
+* Old school
+* Single, long development cycle with no opportunity for feedback until the very end
+* Requirements may have changed by the time something is delivered
+#### Agile
+* Many, shorter cycles
+* More opportunities to obtain feedback and refine requirements
+* Better customer outcome
+#### Lean
+* Similar to agile, add in waste reduction at each review
+* Better outcome for your employer as well as the customer
+
+
  
 ## 1.5 Explain the benefits of organizing code into methods / functions, classes, and modules
  
