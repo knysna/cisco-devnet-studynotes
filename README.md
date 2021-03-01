@@ -1,6 +1,10 @@
 # cisco-devnet-studynotes
 My notes taken in preparation of Cisco DevNet Fundamentals exam 2021.    
-They are revision notes, keywords, etc. Not detailed study materials.
+They are revision notes, keywords, etc. Not detailed study materials.    
+
+Two ways to approach Cisco DevNet training: a) A network engineer who needs to learn programming concepts, b) a programmer who needs to learn networking concepts.  
+The approach you need to take will determine which Exam Topics you need to focus on. I am a network engineer so my revision notes will spend a lot of time on basic programming topics, but almost no time on basic networking topics.  
+
 
 ## Exam Topic Links
 * https://learningnetwork.cisco.com/s/devnet-associate-exam-topics

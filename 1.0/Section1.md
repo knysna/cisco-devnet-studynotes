@@ -105,17 +105,53 @@ print("The access token from YAML is: %s" % pythondata['access_token'])
 
  
 ## 1.5 Explain the benefits of organizing code into methods / functions, classes, and modules
+* It's all about re-usability and efficiency
+* DRY code: Don't Repeat Yourself
+* Answering in terms of Python
+    * Method/Function are the same but used differently or at different times. Methods in classes. Functions standalone.
+        * Built-in tools are methods e.g. string.trim()
+        * Methods often transform an object, Functions often take a object as input and return something new
+    * Classes: templates or blueprints for new objects. Functions inside classes become Methods.
+        * Classes can be members of other Classes - inheritance occurs.
+    * Modules: abstraction layers, links to other pieces of code or classes, used via 'import' statement.
  
 ## 1.6 Identify the advantages of common design patterns (MVC and Observer)
+### Observer design pattern
+* Allocate A, B, C to be observers of D
+* Whenever D changes, it must let A, B and C know about the change
+
+### MVC design pattern
+* Model, View, Controller. SoC principle = Separation of Concerns.
+* Built on top of Observer pattern
+* Model = the data (not the actual database), View = the user interface to see the data, Controller = the interface to manipulate the data
+* Only the Controller can make changes to the Model. The user can only see the Model through the View  
+* A program can have multiple Controllers and multiple Views
+* Modular design pattern means that e.g. View can be updated or replaces without impacting Model or Controller
  
 ## 1.7 Explain the advantages of version control
+* Store current and historical versions
+* Collaborate on same project with others, safely
+* Branch and Merge changes
+* Often free (as in beer)
+* Best Practice
  
 ## 1.8 Utilize common version control operations with Git
  
 ### 1.8.a Clone
+* Get a copy of that repository, over here.
+
 ### 1.8.b Add/remove
+* Tell git which files to track your latest changes
+
 ### 1.8.c Commit
+* Commit your changes (for Added files) to your local repository
+* Add a meaningful commit message
+* Blame
+
 ### 1.8.d Push / pull
+* Push your commited changes from your Local to the Origin
+* Pull other people's commited changes from the Origin to your Local
+
 ### 1.8.e Branch
 ### 1.8.f Merge and handling conflicts
 ### 1.8.g diff
