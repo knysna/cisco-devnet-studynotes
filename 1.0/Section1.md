@@ -141,7 +141,7 @@ print("The access token from YAML is: %s" % pythondata['access_token'])
 * Get a copy of that repository, over here.
 
 ### 1.8.b Add/remove
-* Tell git which files to track your latest changes
+* Tell git which files to track your latest changes for
 
 ### 1.8.c Commit
 * Commit your changes (for Added files) to your local repository
@@ -153,5 +153,20 @@ print("The access token from YAML is: %s" % pythondata['access_token'])
 * Pull other people's commited changes from the Origin to your Local
 
 ### 1.8.e Branch
+* Make a copy on which to make and test your changes without impacting the main branch
+* Can have multiple branches at once (collaboration)
+* Branches must be checked out to work on them
+
 ### 1.8.f Merge and handling conflicts
+* Merge
+    * merge a feature/fix/etc branch into the main branch
+* Conflicts
+    * Most merging is handled neatly by git
+    * In case of a conflict (2 separate changes to the same file), human intervantion is required
+    * git will mark the conflict in the file <<< >>>. Delete the unwanted section, re-add, commit
+
 ### 1.8.g diff
+* 'git diff' will display the difference between the current contents and the index (i.e. what isn't staged)
+* 'git diff --cached' will display the difference between the current index and the last commmit (i.e. what isn't committed)
+* 'git diff HEAD' displays the difference against the last commit (i.e. what will change on the next commit)
+* 'git diff <branchname>' will display the difference against the specified branch
