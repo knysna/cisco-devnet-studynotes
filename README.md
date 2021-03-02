@@ -12,7 +12,7 @@ The approach you need to take will determine which Exam Topics you need to focus
 
 ## Sections
 * [15% 1.0 Software Development and Design](/1.0/Section1.md)
-* [20% 2.0 Understanding and Using APIs](21.0/Section2.md)
+* [20% 2.0 Understanding and Using APIs](/2.0/Section2.md)
 * [15% 3.0 Cisco Platforms and Development](/3.0/Section3.md)
 * [15% 4.0 Application Deployment and Security](/4.0/Section4.md)
 * [20% 5.0 Infrastructure and Automation](/5.0/Section5.md)
