@@ -90,5 +90,72 @@ Via: 1.1 vegur
 ```
 
 ## 2.7 Utilize common API authentication mechanisms: basic, custom token, and API keys
+### HTTP Basic Authentication
+* Password encoded in Base64, passed in a header in the HTTP request 
+* If used in plain HTTP, the password is visible in every request. Must use HTTPS.
+* Very commonly used, even by some Cisco security products
+
+### Custom Token
+* A user is initially authenticated (e.g. using Basic Authentication) and presented a unique token
+* That token is used in subsequent requests instead of the user's own password
+* Token can be set to expire
+* Token can be refreshed using a refresh token
+* Token can be cached by user's web browser for the duration of the session
+
+### API Keys
+* API keys are pre-shared keys known to the server and client
+* API keys can be included in requests by means of cookies, request headers, strings in the body of a request
+* The key is sent with every API call
+* Typically issued per-user/per-application and can be revoked
+
 ## 2.8 Compare common API styles (REST, RPC, synchronous, and asynchronous)
+* REST and RPC both use HTTP, both need a verb/method and a resource/endpoint
+* Plenty of debate online about which is 'better'
+### RPC - Remote Procedure Call
+* Best suited for actions: execute this process
+* XML-RPC has all the advantages and disadvantages of XML
+### REST - Representational State Transfer
+* Best suited for CRUD operations
+### Synchronous
+* Send a request, get the response containing the answer immediately
+* The application must wait for the response before it can continue processing
+    * Can result in interruptions/delays
+### Asynchronous
+* Send a request, get a response acknowledging the request immediately, get a response containing the answer at some later time
+* The application does not need to wait for the response before it can continue processing
+    * Can result in faster applications
+* Example: requesting a report that will take the server a long time to run
+* Can be an additional, separate API to query the status of asynchronous requests e.g. Cisco DNA Center's 'Task API'
+
 ## 2.9 Construct a Python script that calls a REST API using the requests library
+* Import the needed libraries e.g. requests, json
+* Define the API's base URL and the specific API endpoint URI
+* Define authentication/token/API key as required
+* Construct the HTTP headers as described by the API documentation
+* Construct the HTTP body as described by the API documentation (if a body is required - would be useed for POST more than GET)
+* Submit the call using the requests library and the correct method.
+* Do something with the response e.g. print it
+Example GET request from Meraki API:
+```
+import requests
+import json
+
+meraki_tenantID = "01234567899876543321"
+
+meraki_api_key = "1a2b3c4d5e6f0000111112222"
+url =  "https://api.meraki.com/api/v0/organizations/"
+devices_url = url+meraki_tenantID+"/devices"
+
+headers = {
+        "X-Cisco-Meraki-API-Key": meraki_api_key,
+    }
+params = {
+    "perPage": 5
+}
+
+orgs = requests.get(url,headers=headers)
+devices = requests.get(devices_url, headers=headers, params=params)
+
+print(orgs)
+print(devices)
+```
