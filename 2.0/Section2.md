@@ -128,6 +128,7 @@ Via: 1.1 vegur
 * Can be an additional, separate API to query the status of asynchronous requests e.g. Cisco DNA Center's 'Task API'
 
 ## 2.9 Construct a Python script that calls a REST API using the requests library
+### How to:
 * Import the needed libraries e.g. requests, json
 * Define the API's base URL and the specific API endpoint URI
 * Define authentication/token/API key as required
@@ -135,7 +136,9 @@ Via: 1.1 vegur
 * Construct the HTTP body as described by the API documentation (if a body is required - would be useed for POST more than GET)
 * Submit the call using the requests library and the correct method.
 * Do something with the response e.g. print it
-Example GET request from Meraki API:
+
+
+### Example GET request from Meraki API:
 ```
 import requests
 import json
