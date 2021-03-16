@@ -133,6 +133,46 @@ DEVICES = DNAC.devices.get_device_list()
 
 ### ACI
 https://developer.cisco.com/site/aci/    
+#### About ACI
+* The Nexus 9000 has two modes of operation to fit different operational models: NX-OS mode and Application Centric Infrastructure (ACI) mode.
+* ACI Mode uses a cluster of 3 controllers (APICs)
+    * Application Policy Infrastructure Controllers
+* ACI Mode provides spine/leaf architecture 
+    * APICs connect to leaf switches
+* ACI Mode switches are **only** programmable via the policy engine on the APIC.
+    * Configuration is held as XML or JSON on the controller
+    * Each switch also holds a copy of the Concrete model
+    * "Desired state network" aka "Model driven framework"
+* ACI Tenants
+    * separate network/failure domains
+    * divided into Tenant Networking and Tenant Policy
+    * Tenant Networking
+        * L2 and L3 connectivity, VRFs, bridge domains, subnets, etc.
+    * Tenant Policy
+        * Application profiles, end point groups, contracts, filters
+        * Examples: Allow webservers in EPG (end point group) Delta to connect to SQL DB servers and apply specific QoS
+
+#### MIM Managemnent Information Model
+* MIM is represented in a tree, the MIT
+* Nodes in the tree are any physical or logical Management Object, the MO
+* MOs use Distinguished Name naming convention 
+* Tenants are top-level MOs
+#### RESt Interface
+* Northbound: REST API, CLI and GUI for operators and developers
+* Southbound: OpFlex protocol for managing the Nexus switches
+* APIC is designed from day one around APIs
+* https://APIC_Host:port/api/{mo|class}/{dn|clas
+sname}.{xml|json}?\[options]
+    * Content-Type headers are ignored
+* Authentication is done via the generic endpoint above, against the aaaLogin.js which returns a Token
+    * Token is then supplied in subsequent requests as a cookie (APIC-cookie)
+#### APIC SDKs
+* Python SDK: **Cobra**
+* Python library: **acitoolkit**/ **pyaci**
+* Ruby: **ACIrb**
+* Puppet and Ansible extensively supported
+
+
 
 ### Cisco SD-WAN (Viptela)
 ### NSO 
