@@ -175,7 +175,146 @@ sname}.{xml|json}?\[options]
 
 
 ### Cisco SD-WAN (Viptela)
-### NSO 
+https://developer.cisco.com/docs/sdwan/    
+
+#### About Cisco SDWAN
+The Cisco SD-WAN solution is based on the Viptela acquisition. The components of the solution are: vManage, vSmart, vBond and vEdge.
+
+* vManage
+    * Network Management System (NMS) component 
+    * provides a "single pane of glass" for Day 0, Day 1 and Day 2 operations
+    * centralized provisioning, monitoring, and troubleshooting
+    * where policies and templates are defined
+    * single tenant ot multi-tenant
+    * RBAC is enforce here: roles include operater, netadmin, custom
+    * REST API is exposed at the vManage layer
+
+* vSmart
+    * main control plane component of the solution
+    * fabric discovery, 
+    * disseminates control plane information between vEdges 
+    * distributes data plane policies to vEdge routers
+    * implements control plane policies.
+
+* vBond
+    * orchestrator of the fabric
+    * orchestrates both the control plane and the management plane 
+    * first point of authentication for all the fabric components
+    * distributes the list of vSmart and vManage components to the vEdge routers
+    * facilitates NAT traversal
+    * requires universally reachable (public) IP address by all the fabric components.
+    * single and multi-tenant
+
+* vEdge
+    * vManage, vSmart, and vBond are virtual and can run in both VMware ESXi and KVM virtualization environments
+    * vEdges are the routers that get deployed at all the sites throughout the fabric.
+    * establish secure control plane connections with the vSmart controllers
+    * proprietary Overlay Management Protocol (OMP) 
+    * enforce the desired data plane policies
+    * Zero Touch Deployment is supported
+    * traditional routing protocols (OSPF, BGP) and (VRRP). 
+    * virtual or hardware appliances
+
+* IOS-XE
+    * select ISR 1000 series, ISR 4000 series and ASR 1000 series, CSR1000V routers can run as vEdge
+
+#### Cisco SD-WAN REST API
+* Used for
+    * Monitoring device status
+    * Configuring a device (templates)
+    * Querying and aggregating device statistics
+* API Authentication
+    * POST */j_security_check* with content type *x-www-form-urlencoded*
+    * user name and password are submitted as *j_username* and *j_password*
+    * session token is in the response http cookie, *JSESSIONID={session hash}*
+    * use the session cookie in ongoing API requests
+* API Security (Cross Site Request Forgery)
+    * added in v19.2
+    * XSRF token is also needed in addition to the auth token
+    * GET */dataservice/client/token* with content type *application/json*
+    * *JESSIONID={session hash}* cookie from previous step is required to authenticate
+    * XSRF token is in the response body
+    * Use the XSRF token along with the JESSIONID cookie for ongoing API requests
+* Logout
+    * http response code is 302 redirect with location header *https://{vmanage-ip-address}/welcome.html?nocache=*
+* Token header example
+```
+https://{vmanage-ip-address}/dataservice/{api-endpoint-url}
+Content-Type: application/json
+HTTP Header: "Cookie: JESSIONID={session hash id}" "X-XSRF-TOKEN: {XSRF token}"
+```
+* It is mandatory to share the same session if multiple API requests are invoked sequentially
+    * default session lifespan is 24 hours
+    * session inactivity timeout is 30 minutes.
+    * maximum concurrent session number is 250
+* Base URI
+    * https://<vmanage-server>/dataservice
+* vManage API categories
+    * Administrative and management APIs
+        * user, group and tenant management
+        * software maintenance
+        * backup and restore
+        * container management.
+    * Alarm and event APIs
+        * alarm and event notification config
+        * alarm, event, and audit log queries
+    * Configuration
+        * feature template
+        * device template
+        * device policy 
+        * device certificate
+        * device action
+        * action status
+        * device inventory
+    * Device real-time monitoring
+        * devices, links, applications, systems
+    * Device state, statistics bulk APIs
+        * device states
+        * aggregated statistics
+        * bulk queries
+    * Troubleshooting and utility
+
+#### Cisco SDWAN SDKs
+* **python-viptela** provides a Python SDK for interacting with Cisco SDWAN (formerly Viptela) vManage
+* CLI and Ansible modules leverage the SDK
+* *pip install viptela*
+
+
+### NSO (Network Services Orchestrator) (formerly Tail-f)
+https://developer.cisco.com/docs/nso/#!nso-fundamentals    
+
+#### About NSO
+* NSO product is a powerful, flexible, extensible toolbox for network automation and orchestration needs
+    * For service provider networks
+* device abstraction capabilities enable you to automate a wide variety of Cisco and third-party devices, tools, and 
+    * devices drivers are called *NED*s (Network Element Drivers) and are used for abstraction
+* YANG-based models
+* CDB (Configuration DataBase)
+    * core of NSO
+* Fastmap
+    * algorithm to turn YANG models into device-specific config
+* NEDs send the configs to devices
+    * NETCONF is preferred
+        * delivered via SNMP SET or Cisco CLIs
+    * for non-NETCONF or non-Cisco devices: custom CLI or REST NEDs can be used
+
+#### NSO APIs
+* Northbound API - RESTCONF
+    * Refer to swagger docs (200,000 lines of API doc)
+    * RESTCONF must be enabled in the ncs.conf configuration file
+    * base endpoint is */restconf*
+    * basic authentication
+    * Request Header: *"Accept: application/yang-data+xml"*
+
+#### NSO SDKs
+* Python
+    * package name *ncs*
+    * can browse YANG models using PYthon dot notation
+* Java
+* Erlang
+    * econfd
+
+
 ## 3.3 Describe the capabilities of Cisco compute management platforms and APIs (UCS Manager, UCS Director, and Intersight)
 ## 3.4 Describe the capabilities of Cisco collaboration platforms and APIs (Webex Teams, Webex devices, Cisco Unified Communication Manager including AXL and UDS # interfaces, and Finesse)
 ## 3.5 Describe the capabilities of Cisco security platforms and APIs (Firepower, Umbrella, AMP, ISE, and ThreatGrid)
