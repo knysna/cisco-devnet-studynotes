@@ -316,7 +316,78 @@ https://developer.cisco.com/docs/nso/#!nso-fundamentals
 
 
 ## 3.3 Describe the capabilities of Cisco compute management platforms and APIs (UCS Manager, UCS Director, and Intersight)
+### UCS Manager
+* UCS Manager is the single point of management for a UCS Domain.
+* UCS Domains can contain up to twenty blade chassis with each chassis holding up to eight half-width blades.
+    * up to one hundred and sixty servers total
+* Unifies management of Cisco UCS blade and rack servers, Cisco UCS Mini, and Cisco HyperFlex
+* Policy-driven, model-based architecture
+* Management Information Model (MIM), Management Information Tree (MIT) etc.
+#### UCS Manager SDKs
+* Powershell: **UCS PowerTool**
+* Python: **ucspython**: *pip install uscmsdk*
+
+
+### UCS Director
+* Provides the foundation for infrastructure as a service (IaaS), including a self-service portal for end users
+* Supported by independent hardware and software vendors through open APIs
+* automates, orchestrates, and manages Cisco and third-party hardware
+#### UCS Director API
+* REST API
+* Authentication via API tokem
+    * Example header is *X-Cloupia-Request-Key: F90ZZF12345678ZZ90Z12ZZ3456FZ789*
+* Example
+```
+The sample JSON-based API URL to retrieve all catalogs using the GET method:
+http://<serverip>/ app/api/rest?formatType=json&opName=userAPIGetAllCatalogs&opData={} 
+```
+#### UCS Director SDKs
+* Java
+* PowerShell
+
+
+### Intersight
+https://intersight.com/apidocs/introduction/overview/    
+* Cloud-hosted management for Cisco UCS and Cisco HyperFlex
+
+#### Intersight API
+* API calls to intersight.com:443
+* REST API, json only
+* Read and write methods
+* Example
+```
+POST https://intersight.com/api/v1/Server/Profiles/5a5f30237a6d67337212e705
+Content-Type: application/json
+Body:
+{
+  "Tags": [
+    {"Key": "Site",        "Value": "London"},
+    {"Key": "Environment", "Value": "Scale"},
+    {"Key": "Owner",       "Value": "Bob"}
+  ],
+}
+```
+
+#### Intersight SDKs
+* intersight-ansible
+* intersight-terraform-modules
+* PowerShell
+* Python
+* ServiceNow plugin
+
 ## 3.4 Describe the capabilities of Cisco collaboration platforms and APIs (Webex Teams, Webex devices, Cisco Unified Communication Manager including AXL and UDS # interfaces, and Finesse)
+
+### Webex Teams
+
+### Webex Devices
+
+### Cisco Unified Communication Manager (CUCM)
+#### AXL
+#### UDS
+
+### Finesse
+
+
 ## 3.5 Describe the capabilities of Cisco security platforms and APIs (Firepower, Umbrella, AMP, ISE, and ThreatGrid)
 ## 3.6 Describe the device level APIs and dynamic interfaces for IOS XE and NX-OS
 ## 3.7 Identify the appropriate DevNet resource for a given scenario (Sandbox, Code Exchange, support, forums, Learning Labs, and API documentation)
