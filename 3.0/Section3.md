@@ -378,6 +378,119 @@ Body:
 ## 3.4 Describe the capabilities of Cisco collaboration platforms and APIs (Webex Teams, Webex devices, Cisco Unified Communication Manager including AXL and UDS # interfaces, and Finesse)
 
 ### Webex Teams
+* https://developer.cisco.com/site/webex-101/
+* Conversations in Webex Teams take place in virtual meeting rooms called spaces. 
+* Some spaces live for a few hours, while others become permanent
+* Includes messages, video, whiteboard
+* Org -> Teams -> Rooms -> Users (membership)
+* APIs allow
+    * integrations
+    * bots
+    * admin tasks
+
+#### Webex Teams API Authentication
+* Personal Access Tokens
+    * authentication header
+    * short 12-hour lifetime, used for app development
+* Integrations: OAuth 2 token
+    * Register integration at https://developer.webex.com/my-apps/new
+    * Request permission at https://webexapis.com/v1/authoriza
+    * Retrieve the authZ code from the URL
+    * 'Scopes' determine what the integrated app can access
+        * e.g. spark:rooms_write = manage Rooms, spark:rooms_read = list Rooms
+* Guest Issuers
+    * special tokens for e.g. visitors to your website that you want to chat with
+    * JSON Web Token (JWT)
+    * Guests cannot interact with other guests
+    * https://developer.Webex.com/my-apps/new/guest-issuer
+    * Guest Issuer secret is used to generate a Bearer Token for the guest's session
+
+#### Webex Teams APIs
+* Legacy URI: https://api.ciscospark.com
+* New URI: https://webexapis.com
+
+* Organizations API
+    * Organization = "a set of people"
+    * Administrator access only
+    * List org names, list org details
+    * e.g. to list all Orgs: 
+    ```
+    GET https://webexapis.com/v1/organizations 
+    ```
+
+* Teams API
+    * Team = "a group of people who can see the same set of rooms"
+    * API to create/delete/rename Teams
+    * e.g. to create a new Team:
+    ```
+    POST https://webexapis.com/v1/teams
+    Headers:
+    'Authorization' : 'Bearer longstring12234etcDBAFafgr446565fgsfGsN-'
+    'Content-Type' : 'application/json'
+    Payload:
+    { "name" : "The Name Of The New Team"}
+    ```
+
+* Rooms API
+    * Room = a place where people post messages
+    * API to create/delete/rename Rooms
+    * e.g. to delete a Room:
+    ``` 
+    DELETE https://webexapis.com/v1/rooms/RoomIDToDelete
+    ```
+
+* Membership API
+    * Membership = user who can access a Room
+    * API to list/invite/update/delete members
+    * e.g. to add a Member to a Room
+    ```
+    POST https://webexapis.com/v1/memberships
+    Headers:
+     'Authorization' : 'Bearer longstring12234etcDBAFafgr446565fgsfGsN-'
+    'Content-Type' : 'application/json'
+    Payload:
+    { "roomId" : "Foo234XYZbanana8865743AAABB"
+    "personEmail" : "theNewguy@contoso.com"
+    "personDisplayName" : "New Guy"
+    "isModerator" : "false"
+    }  
+
+* Messages API
+    * Messages = items posted in a Room. Plaintext, Richtext, file attachment.
+    * e.g. to post a new message:
+    ```
+    POST https://webexapis.com/v1/messages
+    Headers:
+    'Authorization' : 'Bearer longstring12234etcDBAFafgr446565fgsfGsN-'
+    'Content-Type' : 'application/json'
+    Payload:
+    { "roomId" : "Foo234XYZbanana8865743AAABB"
+    "text" : "The text to be posted as a message"
+    }  
+    ```
+
+
+* Bots API
+    * Bots = chatbots that simulate interacting with a person or trigger actions
+    * Bots are similiar to regular users, use @mention
+        * Notification bot: some external info gets posted into a Room
+        * Controller bot: are invoked from within the Room to trigger an action on some external API
+        * Assistant bot: ask it questions
+    * Bot Frameworks
+        * Flint
+        * Botkit
+
+#### Webex Teams SDKs
+* Go
+* Java
+* Node.js
+* PHP
+* Python (webexteamssdk)
+* Android
+* Javascript for browsers
+* iOS
+* Windows
+* Widgets
 
 ### Webex Devices
 
