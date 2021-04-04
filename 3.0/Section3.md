@@ -493,15 +493,141 @@ Body:
 * Widgets
 
 ### Webex Devices
+* Collaboration devices placed in meeting rooms or desks
+    * Webex Board
+    * Webex Desk Pro
+    * Cisco Telepresence
+    * etc
+* API is called **xAPI**
+#### xAPI
+* Commands
+* Config
+* Status e.g. GET http://device/status.xml
+* Events
+* Authentication by 
+    * HTTP Basic Auth
+    * Session Auth
+        * POST http://device/xmlapi/session/begin (basic auth)
+        * Returns session cookie 'Cookie' : 'SessionId=someverylongstring'
+        * Limited numer of sessions, must gracefully log out!
+* Can set webhooks alerts via POST
+
 
 ### Cisco Unified Communication Manager (CUCM)
+* APIs used for
+    * Provisioning
+    * Monitoring
+    * Serviceability
+    * Call routing
 #### AXL
+* https://developer.cisco.com/docs/axl/#!axl-developer-guide/overview
+* Administrative XML API
+* is a SOAP API
+    * must adhere to XML Schema
+    * download the schema from the CUCM 
+        * https://CUCM/plugins/axlsqltoolkit.zip
+* requests are sent to the Unified CM Publisher server (recommended)
+* Authentication by 
+    * HTTP Basic Auth
+        * Username and password are base64 encoded
+        * use a dedicated AXL user account
+    * Session cookie
+        * JSESSIONIDSSO
+        * 'Cookie' : 'JSESSIONIDSSO=someVeryLongstring'
+* AKL service must be manually started
+* Requests are only https - ensure the server cert is trusted
+* Example request XML payload
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://www.cisco.com/AXL/API/12.5">
+    <soapenv:Header/>
+    <soapenv:Body>
+    <ns:executeSQLQuery>
+        <sql>Select name from device where tkclass = 1</sql>
+    </ns:executeSQLQuery>
+    </soapenv:Body>
+</soapenv:Envelope>
+```
+* Python
+    * Zeep library (generic SOAP client)
+    * CiscoAXL library
+
 #### UDS
+* User Data Services
+* UDS is a REST based API that allows end useres to insert, retrieve, update, and remove their *own user data* from Cisco Unified CM
+* Actions to be accomplished using UDS include:
+    * Directory Search for Users
+    * Manage Call Forward, Do Not Disturb, and Speed Dial settings, including Visual & * Audible Alert preferences
+    * Set Language and Locale
+    * Subscribe to IP Phone Service Applications
+    * Reset PIN/Password credentials
+    * Configure Remote Destinations used with Cisco Mobility & Single Number Reach
+* XML data format only
+    * 'Accept' : 'application/xml'
+* GET https://{host}:8443/cucm-uds/user/{userId}
+
 
 ### Finesse
+* Browser-based contact center application (Unified Contat Center CCE/CCX)
+    * Agent and supervisor desktops
+    * Applications built completely on the APIs
+* REST API over HTTP or HTTPS
+* API Authentication by:
+    * HTTP Basic Auth
+        * Base64 encoded
+    * If single sign on mode enabled
+        * Bearer token
+#### Finesse Gadgets
+* Gadgets allow other JavaScript apps + Finesse to be presented in one desktop
+    * OpenSocial
+####  Finesse APIs
+* https://developer.cisco.com/docs/finesse/#!finesse-overview/finesse-rest-apis
+* User - Represents an Agent, Supervisor or Administrator
+    * Get User Details
+    * Change User state (e.g. Sign In, Sign Out, Ready, Not Ready, etc.)
+    * Get User's Dialogs
+* Dialog – Represents a call and the participants if the Media Type is voice
+    * Get Dialog Details
+    * Make a call
+    * Take action on a participant (e.g. Answer, Hold, Retrieve, etc.)
+    * Take action on a call (e.g. Update call variables, DTMF, Consult, Single Step Transfer, etc.)
+    * Take a supervisor action on a call (e.g. Silent Monitor, Barge, Start recording, * etc.)
+    * Make outbound related actions (e.g. Accept, close, Reject, Reclassify, Schedule, * Cancel, etc.)
+* Media - Represents a user's state in a non-voice Media Routing Domain (MRD) for CCE * deployments
+    * Get Media Details
+    * Change User state for a MRD (e.g. Sign In, Sign Out, Ready, Not Ready)
+    * Change User to Routable/Not Routable
+    * Get List of non-voice Media Routing Domains for a User
+* Queue - Represents a queue (or skill group in Unified CCE)
+    * Get Queue Details
+    * Get List of Queues for a User
+* Team – Represents a team of Users
+    * Get Team Details
+* TeamResource - Represents a team configuration based on Team assignments
+    * Get Reason Codes (Not Ready, Logout, Wrap Up)
+    * Get User Media Properties Layout
+    * Get Phonebooks
+    * Get Workflows
+* SystemInfo - Represents current state of the system
+    * System Details (e.g. XMPP Server, PubSub Domains, Node IP Addresses, Status, * Deployment Type, etc.)
+* ClientLogs – For sending client-side logging to the Finesse Server
+    * Send Client logs to the Finesse server 
+
+
 
 
 ## 3.5 Describe the capabilities of Cisco security platforms and APIs (Firepower, Umbrella, AMP, ISE, and ThreatGrid)
+
+### Firepower
+
+### Umbrella
+
+### AMP
+
+### ISE
+
+### Threatgrid
+
 ## 3.6 Describe the device level APIs and dynamic interfaces for IOS XE and NX-OS
 ## 3.7 Identify the appropriate DevNet resource for a given scenario (Sandbox, Code Exchange, support, forums, Learning Labs, and API documentation)
 ## 3.8 Apply concepts of model driven programmability (YANG, RESTCONF, and NETCONF) in a Cisco environment
