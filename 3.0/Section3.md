@@ -618,15 +618,136 @@ Body:
 
 ## 3.5 Describe the capabilities of Cisco security platforms and APIs (Firepower, Umbrella, AMP, ISE, and ThreatGrid)
 
-### Firepower
+### Firepower (NGFW)
+ https://developer.cisco.com/firepower    
+ * REST APIs communicate with FMC (Firepower Management Center)
+     * FMC communicates with FP and FTD devices
+* Token-based authentication
+    * Login Request Headers should include:
+        * 'Authorization': "Basic somelongBase64EncodedStringWhichIsTheAuth="
+    * Response headers will include:
+        * 'X-auth-access-token': "the-long-token-goes-here"
+    * Subsequent requests must use the X-auth-access-token header
+* API documentation is in API Explorer
+    * Browse to FMC_IP/api/api-explorer
+* FMC API mainly deals with CRUD operations on Objects
+    * e.g. Create a new Network, Interface, or IP address
 
-### Umbrella
+### Umbrella (DNS cloud-based security)
+* Multiple APIs for different functions
+    * Management API
+        * Management of the account's orgs, users, network devices
+        * https://management.api.umbrella.com/v1/...../Id/...../customerId
+    * Reporting API
+        * Organisation-level reporting of requests, identities, security activities
+    * Console Reporting API
+        * MSP-level reporting (i.e. multiple Orgs in a single summary)
+    * Network Device Management API
+        * Management of Network Devices i.e. permitting those devices that are forwarding DNS requests to Umbrella, and allocating the received requests to the correct Orgs
+    * Enforcement API
+        * Blocked domain lists, etc.
+        * https://s-platform.api.opendns.com
+    * Investigate API
+        * Query Umbrella database for security events e.g. for a specific domain
+        * https://investigate.umbrella.com
+* Authentication
+    * HTTP-basic authentication (Base64 encoded username and password)
+    * Enforcement API also requires customerKey argument 
+    * Investigate API requires bearer token
 
-### AMP
+### AMP (Advanced Malware Protection)
+* Cloud-based endpoint protection, agents installed on endpoints
+* https://api.amp.cisco.com
+* API uses
+    * Audit logs
+    * List events
+    * List computers
+    * List user activity
+    * Search for events across the org
+    * List policies
+    *List vulnerabilites
+* API authentication
+    * API credentials are configured in web console
+    * Console returns a username and password in form of ClientID and ClientKey
+    * Option 1: ID and Key are prepended to the requests
+        * e.g. https://clientID:clientKey@api.amp.cisco.com/..../endpoint
+    * Option 2: ID and Key are Base64 encoded for use in HTTP basic Auth header
+        * e.g. 'Authorization' : 'Basic TheLongBase64EncodedString'
 
-### ISE
 
-### Threatgrid
+### ISE (Identitity Services Engine/NAC)
+* https://developer.cisco.com/docs/identity-services-engine/3.0/
+* 2 APIs: Monitoring and External
+#### Monitoring API
+* REST API
+    * XML output
+    * XML schema is obtained from the Version API endpoint
+* Example endpoint: https://<ISEhost>/admin/API/mnt/Session/MACAddress/<macaddress>
+* Categories
+    * Session and node data
+    * CoA
+    * Troubleshooting
+* Monitoring API Authentication
+    * User must be a member of Super Admin, System Admin, MnT Admin
+    * Restricted Monitoring 'persona' - can not be used to access e.g. Policy information
+#### External API
+* External RESTful Services (ERS) APIs
+* REST API on HTTPS, port 9060
+* ERS allows external clients to perform CRUD on Cisco ISE resources.
+    * e.g. Integration with external visitor management system
+* External API Authentication
+    * HTTP Basic authentication in request header
+    * User must be a member of 'ERS Admin', 'ERS Operator'
+* Must enable ERS in the ISE admin console, to open port 9060
+
+
+### Threatgrid (Malware analysis)
+* Now rebranded as SecureX
+* https://developer.cisco.com/threat-grid/
+* Cloud-based or on-prem
+* API used for
+    * upload files for analysis aka Submitting Samples
+    * querying the database
+    * deliver threat intelligence aka Curate Feeds, hourly or daily
+* API authentication
+    * API key
+    * To receive an API key go to the Threat Grid dashboard and click your username in the top right corner. Then click My Account and then Generate API Key.
+* API URL is https://panacea.threatgrid.com
+* Example Request and Response for submitting a sample
+```
+POST /api/v2/samples?api_key=12345abcde HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Host: panacea.threatgrid.com
+Content-Disposition: form-data; name="sample"; filename="test_file.txt"
+Content-Disposition: form-data; name="network_exit"
+Content-Disposition: form-data; name="private"
+Content-Disposition: form-data; name="vm"
+
+-----
+{
+  "api_version": 2,
+  "id": 5760911,
+  "data": {
+    "tags": [
+      ""
+    ],
+    "md5": "8f3a3bc8c6ff1a9ebf39e29e31054ddb",
+    "private": true,
+    "analyzing": true,
+    "vm": "win10",
+    "submission_id": 876379151,
+    "state": "wait",
+    "login": "jwick",
+    "sha1": "3cebd815a45a3014498cfaa6c224071736f22f61",
+    "filename": "safe.pdf",
+    "status": "pending",
+    "submitted_at": "2020-02-05T21:57:37Z",
+    "id": "3c9b42a4dc08e2d61074f21e951446b0",
+    "sha256": "73661efe4d40c8e1760052717f3df40ef0db74cfdc0b29f3c7f8bfd7c5b8a1ff",
+    "os": ""
+  }
+}
+```
 
 ## 3.6 Describe the device level APIs and dynamic interfaces for IOS XE and NX-OS
 ## 3.7 Identify the appropriate DevNet resource for a given scenario (Sandbox, Code Exchange, support, forums, Learning Labs, and API documentation)
