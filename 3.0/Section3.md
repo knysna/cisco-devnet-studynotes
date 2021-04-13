@@ -750,6 +750,81 @@ Content-Disposition: form-data; name="vm"
 ```
 
 ## 3.6 Describe the device level APIs and dynamic interfaces for IOS XE and NX-OS
+* Slightly misleading title, this seciton is really about: YANG models, NETCONF, RESTCONF, gRPC
+### Model Driven Programmability
+* https://tools.ietf.org/html/rfc3535
+* RFC3535 = the search for a better data model (SNMP developed in 1980s)
+* Which resulted in
+    * NETCONF, RFC4741, 2006
+    * YANG, RFC 6020, 2010
+    * RESTCONF, RFC8040, 2017
+    * gRPC (Google, no RFC)
+* YANG is the data model
+* NETCONF, RESTCONF, gRPC are the *transport protocols*
+* Can be used for Northbound or Southbound APIs
+#### NETCONF
+* Server = "NETCONF Agent"
+* Client = "NETCONF Manager"
+* Can be used for YANG or non-YANG data
+* Typically uses XML format
+* Uses **SSH** on **port 830** as underlying communication
+#### RESTCONF
+* XML or JSON format
+* Uses **HTTPS** on **port 443** as underlying transport
+#### YANG
+* Specifically designed for describing network data models
+* Very structured
+* Highly typed
+* Modules, Containers, Lists, Leafs
+* Models created by network vendors or informal groups
+* Python Library: pyang
+* Example IETF standard model: *ietf-interfaces.yang*
+
+### IOS XE
+* https://developer.cisco.com/site/ios-xe/
+* NETCONF runs on port 830
+* Enable NETCONF with command "netconf-yang"
+* Enable RESTOCNF with commands "ip http secure-server" + "restconf"
+* NETCONF and RESTCONF connections should be authentication by RADIUS or TACACS+
+    * RADIUS VSA "shell:priv-lvl=15"
+* Applications can stream data using NETCONF+YANG subscriptions
+    * Periodic subscription = sent on configured interval
+    * On-change subscription = sent on specific event e.g. interface down
+    * Configured by using establish-connection RPC
+    * Receivers can be any collector supporting IETF Pub/Sub
+* On-box Python
+    * iox
+    * Guestshell enable (CentOS7)
+* Off-box Python
+    * NCCLient (NETCONF library)
+    * YANG Developer Kit (YDK-py) - contains native Python bindings
+```
+    from ydk.services import CRUDService
+from ydk.providersimport NetconfServiceProvider
+from ydk.models.cisco_ios_xeimport Cisco_IOS_XE_native as xe_native
+
+def config(interface):
+    """Add config data to interface object."""
+    gigabitethernet= interface.Gigabitethernet() 
+    gigabitethernet.name = "2/0/10" 
+    gigabitethernet.description = "Connected_to_Core_Switch" 
+    gigabitethernet.ip.address.primary.address = "15.10.1.1" 
+    gigabitethernet.ip.address.primary.mask = "255.255.255.0" 
+    ip_add.gigabitethernet.append(gigabitethernet)
+
+interface = xe_native.Native.Interface()  # create object 
+config(interface)  # add object configuration
+```
+* Ansible modules
+    * IOS-XE included in core Ansbile install
+* Day Zero options
+    * Network Plug-N-Play (APIC-EM)
+    * ZTP (Download configuration Python Script from TFTP via DHCP options)
+    * PXE (Download software boot image)
+
+
+### NX-OS
+* https://developer.cisco.com/site/nx-os/
 ## 3.7 Identify the appropriate DevNet resource for a given scenario (Sandbox, Code Exchange, support, forums, Learning Labs, and API documentation)
 ## 3.8 Apply concepts of model driven programmability (YANG, RESTCONF, and NETCONF) in a Cisco environment
 ## 3.9 Construct code to perform a specific operation based on a set of requirements and given API reference documentation such as these:
