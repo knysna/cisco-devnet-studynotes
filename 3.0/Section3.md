@@ -750,7 +750,7 @@ Content-Disposition: form-data; name="vm"
 ```
 
 ## 3.6 Describe the device level APIs and dynamic interfaces for IOS XE and NX-OS
-* Slightly misleading title, this seciton is really about: YANG models, NETCONF, RESTCONF, gRPC
+* Slightly misleading title, this section is primarily about: YANG models, NETCONF, RESTCONF, gRPC
 ### Model Driven Programmability
 * https://tools.ietf.org/html/rfc3535
 * RFC3535 = the search for a better data model (SNMP developed in 1980s)
@@ -825,9 +825,54 @@ config(interface)  # add object configuration
 
 ### NX-OS
 * https://developer.cisco.com/site/nx-os/
+* latest release of Cisco NX-OS is known as **Open NX-OS**
+    * exposes more raw underlying Linux OS to netadmins
+    * allows NX-OS switch to be managed by common Linux management tools e.g. Puppet, Chef, Ansible
+    * Linux package management
+        * familiar commands e.g. *root@n9k-sw-1# yum install puppet*
+    * Guest shell
+    * Linux Containers
+        * 3rd party apps can be updated indepently from the switch
+    * ifconfig, ethtool, netdevice
+    * tcpdump, ping, traceroute
+    * Linux network stack
+* User roles exist on the switch
+    * **dev-ops** is a predefined Linux system role for user 'admin'
+    * 'bash' feature must be explicitly enabled
+        * native Open NX-OS environment
+* Vshell vsh used in bash to configure switch
+    * e.g. *root@n93k-sw-1#vsh -c "config terminal ; interface vlan 200 ; no shutdown ; exit"*  
+    * e.g. *root@n9k-sw-1# ifconfig Eth2-4 down*
+* Can run persistent custom applications using /etc/init.d (level 3)
+* Guest shell is a pre-built secure CentOS7 container
+    * Can be used to interact with /bootflash
+    * Python, Perl are preinstalled
+    * can execute commands on NX-OS using the **dohost** app
+* POAP Power-On Auto Provisioning
+    * Allows for configuration of a Nexus switch by PXE
+* APIs
+    * Python libraries
+        * "cli" package
+        * "cisco" package 
+    * NX-API REST
+        * model-driven (YANG)
+    * NZ-AP CLI
+        * embed CLI commands in a json or XML payload sent over HTTP
+
 ## 3.7 Identify the appropriate DevNet resource for a given scenario (Sandbox, Code Exchange, support, forums, Learning Labs, and API documentation)
+* Sandbox: Cisco-supplied VMs/devices to practice on
+* Code exchange: shared community snippets of code on various topics/platforms
+* Support: TAC for issues on devices with support contracts
+* Forums: Community support, general questions
+* Learning Labs: guided lab exercises
+* API documentation: supplied with each product
+
 ## 3.8 Apply concepts of model driven programmability (YANG, RESTCONF, and NETCONF) in a Cisco environment
+* Hopefully this concept is clear by now? See notes for 3.6
+
 ## 3.9 Construct code to perform a specific operation based on a set of requirements and given API reference documentation such as these:
 ### 3.9.a Obtain a list of network devices by using Meraki, Cisco DNA Center, ACI, Cisco SD-WAN, or NSO
+
 ### 3.9.b Manage spaces, participants, and messages in Webex Teams
+
 ### 3.9.c Obtain a list of clients / hosts seen on a network using Meraki or Cisco DNA Center
