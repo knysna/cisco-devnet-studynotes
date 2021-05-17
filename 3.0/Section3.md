@@ -871,8 +871,347 @@ config(interface)  # add object configuration
 * Hopefully this concept is clear by now? See notes for 3.6
 
 ## 3.9 Construct code to perform a specific operation based on a set of requirements and given API reference documentation such as these:
+
+* NB it states that documentation will be provided, no need to memorise
+
 ### 3.9.a Obtain a list of network devices by using Meraki, Cisco DNA Center, ACI, Cisco SD-WAN, or NSO
 
-### 3.9.b Manage spaces, participants, and messages in Webex Teams
+#### Meraki
+```
+import requests
+import json
+
+devnet_lab_id = "566327653141842188"
+
+meraki_api_key = "8f90ecec4fca692f606092279f203c6020ca011c"
+url =  "https://api.meraki.com/api/v0/organizations/"
+devices_url = url+devnet_lab_id+"/devices"
+
+headers = {
+        "X-Cisco-Meraki-API-Key": meraki_api_key,
+    }
+params = {
+    "perPage": 3
+}
+
+orgs = requests.get(url,headers=headers)
+print(json.dumps(orgs.json(), indent=4))
+
+devices = requests.get(devices_url, headers=headers, params=params)
+formatted_message = """
+Meraki Dashboard API Response
+-----------------------------
+Response Status Code    : 
+{}
+Response Link Header    : 
+{}
+Response Body           : 
+{}
+-----------------------------
+""".format(devices.status_code, devices.headers.get('Link'), json.dumps(devices.json(), indent=4))
+print(formatted_message)
+```
+
+#### DNAC
+```
+import requests
+#from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import json
+import sys
+from dna_center_authenticate import get_X_auth_token #the previous script from this exercise
+
+#### Cisco DNA Center URL and auth creds
+# Bad practice, for lab use only
+
+dnacip = "devasc-dnacenter-1.cisco.com"
+username = "Username"
+password = "secretpassword"
+####
+
+# Get Network Device API wrapper
+def get_network_device(dnacip, headers, params, modifier):
+    """
+    Get Network Device API Wrapper
+    This function returns the response from a Get Newtwork Device request
+    if Status =200
+    else if prints the Status and Response, and aborts
+
+    Parameters
+    ----------
+    dnacip (str): dnac routable DNS address or IP
+    headers: HTTP headers for the request
+    params: parameters to be added to the GET request
+
+    Return
+    ------
+    response
+    """
+
+    # Get Network Device URI (syntax as per API docs)
+    uri = "https://"+dnacip+"/dna/intent/api/v1/network-device"+modifier
+    try:
+        # if password == "":
+        #     print("\n---\nGET %s"%(uri))
+        # else:
+        #     print("\n---\nGET %s %s"(uri,params))
+
+        resp = requests.get(uri,headers=headers,params=params,verify=False)
+        return resp
+    except:
+        # Somehow failed to get data
+        print("Status: %s"%resp.status_code)
+        print("Response: %s"%resp.text)
+        sys.exit()
+
+# Authenticate to the DNA Center and get a token
+token = get_X_auth_token(dnacip, username, password)
+print("Token: ", (token))
+
+# Assign the token to a header
+headers = { "x-auth-token": token}
+
+# Get a count of all devices of all type know to the DNAC by appending /count
+params = ""
+modifier="/count"
+resp2 = get_network_device(dnacip, headers, params, modifier)
+print("Count of all devices: ",json.dumps(resp2.json()["response"]))
+
+# Get the full set of information
+params=""
+modifier=""
+resp3 = get_network_device(dnacip,headers,params,modifier)
+print(json.dumps(resp3.json()["response"],indent=4))
+
+# Filtering example: Focus on Cisco 9300 Switches
+
+# Count the 9300's
+params = "series=Cisco Catalyst 9300 Series Switches"
+modifier = "/count"
+resp4 = get_network_device(dnacip,headers,params,modifier)
+switch_count = int(json.dumps(resp4.json()['response']))
+print("Catalyst 9300 Switch count: ", switch_count)
+
+# Get the 9300s list
+params = "series=Cisco Catalyst 9300 Series Switches"
+modifier = ""
+resp4 = get_network_device(dnacip,headers,params,modifier)
+switch_list = (json.dumps(resp4.json()['response'],indent=4))
+print("Catalyst 9300 Switch list: ", switch_list)
+```
+
+#### ACI
+```
+import json
+import requests
+import urllib3
+from urllib3.exceptions import InsecureRequestWarning
+
+APIC_URL = "https://devasc-aci-1.cisco.com"
+
+# APiC Login
+def apic_login():
+    """
+    Login to APIC
+    """
+    token = ""
+    err = ""
+
+    try:
+        response = requests.post(
+            url=APIC_URL+"/api/aaaLogin.json",
+            headers={
+                "Content-Type": "application/json; charset=utf-8",
+                },
+            data=json.dumps(
+                {
+                    "aaaUser": {
+                        "attributes": {
+                            "name": "username",
+                            "pwd": "secretpassword"
+                        }
+                    }
+                }
+            ),
+            verify=False
+            )
+        
+
+        json_response = json.loads(response.content)
+        token = json_response['imdata'][0]['aaaLogin']['attributes']['token']
+        print(token)
+
+        print("Response HTTP Status Code: {status_code}".format(status_code=response.status_code))
+    except requests.exceptions.RequestException as err:
+        print("HTTP Request failed")
+        print(err)
+
+    return token
+    
+
+# Function to get the devices from ACI
+def get_devices():
+    """
+    Get Devices from ACI
+    """
+    token = apic_login()
+    url=APIC_URL+"/api/node/class/topology/pod-1/topSystem.json"
+    print("GET request resource: ", url)
+
+    try:
+        respone = requests.get(
+            url,
+            headers={
+                "Cookie": "APIC-cookie="+token,
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            verify=False
+        )
+        print("Response HTTP Status Code: {status_code}".format(
+            status_code=respone.status_code
+        ))
+        print("Response HTTP Response Body: ",json.dumps(respone.json(), indent=4))
+    except requests.exceptions.RequestException:
+        print("HTTP Request Failed")
+
+
+print("++++++++++++++++GET DEVICES+++++++++++++++")
+get_devices()       
+```
+
+#### Cisco SD-WAN (Viptela)
+```
+import requests
+import pprint # pretty printer
+import urllib3
+
+# Disable security warning for the lab server
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# vmanage_host = "devasc-sdwan-1.cisco.com"
+# vmanage_port = "443"
+# vmanage_username = "username"
+# vmanage_password = "secretpassword"
+
+
+base_url = "https://{}:{}".format(vmanage_host, vmanage_port)
+
+# SDWAN login / session token is via the path /j_security_check
+login_action = "/j_security_check"
+
+# for SDWAN the user and passwd are passed in the payload of the API call
+login_data = {"j_username": vmanage_username, "J_password": vmanage_password}
+
+# Build the login url
+login_url = base_url + login_action
+print(login_url)
+
+# New session
+session = requests.session()
+login_response = session.post(
+    url=login_url,
+    data=login_data,
+    verify=False
+)
+
+# Response should not be in html
+if b'<html>' in login_response.content:
+    print("Login failed at step 1")
+    exit(1)
+
+# Get a token
+xsrf_token_url = base_url + "/dataservice/client/token"
+print(xsrf_token_url)
+
+login_token = sesion.get(
+    url=xsrf_token_url,
+    verify=False
+)
+if login_token.status_code == 200:
+    if b'<html>' in login_token.content:
+        print("Login failed at step 2")
+        exit(1)
+    session.headers['X-XSRF-TOKEN'] = login_token.content
+
+print(session.headers)
+
+device_url = base_url + "/dataservices/device"
+
+device_list = session.get(
+    url-device_url,
+    verify=False
+)
+
+if device_list.status_code == 200:
+    json_data = device_list.json()
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(json_data)
+else:
+    print(device_list.status_code)
+    exit(1)
+```
+
+#### NSO
+```
+import requests
+from urllib3.exceptions import InsecureRequestWarning
+
+username = 'username'
+password = 'secretpassword'
+
+url = "https://devasc-nso-1.cisco.com/restconf/data/tailf-ncs:devices/device=ios0/config"
+
+headers= {
+    'Content-Type': 'application/yang-data+json'
+}
+
+# supress warnings for lab server
+#requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+response = requests.get(
+    url,
+    auth=(username, password),
+    headers=headers,
+    verify=False
+)
+
+print(response.text)
+```
+
+
+
+### 3.9.b Manage spaces, participants, and messages in Webex Teams (Cisco Spark)
+```
+# Can get an acces token for lab by signing up for a free account
+# There are many more to explore. More information on formatting messages can be found at developer.webex.com. For additional examples of what you can send, you can find out more information on sending attachments or Adaptive Cards for more interactivity on the developer.webex.com/docs Documentation site.
+
+import requests
+
+access_token = ''  # Make sure to add your access token here
+room_id = '' # Add the roomId here
+message = 'Hello World!' # This is your Markdown message
+url = 'https://api.ciscospark.com/v1/messages'
+headers = {
+    'Authorization': 'Bearer {}'.format(access_token),
+    'Content-Type': 'application/json'
+}
+params = {'roomId': room_id, 'markdown': message}
+res = requests.post(url, headers=headers, json=params)
+print(res.json())
+```
 
 ### 3.9.c Obtain a list of clients / hosts seen on a network using Meraki or Cisco DNA Center
+
+#### Meraki
+```
+Get Network Clients
+
+Operation Id:getNetworkClients
+
+Description:List the clients that have used this network in the timespan
+
+GET /networks/{networkId}/clients
+```
+
+#### DNA Center
+* this one seems to be a non-existent endpoint in any version of API docs
+    * can list network devices but not clients
+        * GET /dna/intent/api/v1/network-device
