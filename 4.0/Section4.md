@@ -91,6 +91,7 @@ if __name__ == '__main__':
 * Sample Dockerfile
 ```
 FROM python
+MAINTAINER Your Name and Email Address
 WORKDIR /home
 COPY ./sample-app.py / .
 RUN pip install flask
@@ -100,7 +101,60 @@ EXPOSE 8080
 
 ## 4.7 Utilize Docker images in local developer environment
 
+* 3 parts - client, host, registry
+* client - CLI utility that communicates with the Docker host
+* host - machine running the Docker deamon
+    * local or remote from client
+* registry - store of container images
+    * can be private or public e.g. Docker Hub
+### How to use 'docker' command
+* *docker [OPTIONS] COMMAND*
+* Get help on any command with *docker COMMAND --help*
+
+### How to lauch/use a container
+* *run* command = *create* + *start*
+* *docker run -it ubuntu bash*
+    * If being used for the first time, the Ubuntu container is downloaded
+* Make container available (publish port): *-p 8088*
+    * Re-map ports: *-p 80:8088*
+* Run the container in detached mode *-d*
+* Use a custom name instead of the random name: *--name custom-name*
+* Mount a volume to the container using *-v file-path*
+
+
+
+### Container management
+* View running containers: *docker container ls*
+* View running and stopper containers: *docker container ls -a*
+* View images: *docker image ls* or *docker images*
+* Connect to a running containder: *docker container attach [ID]*
+* Exit a container but leave it running: *CTRL + P, Q*
+* View details: *docker container inspet [ID]*
+* Gracefully stop a container: *docker container stop [NAME]*
+* Force stop a container: *docker container kill [NAME]*
+* Delete a container: *docker container -rm [NAME]*
+* Delete all stopped containers: *docker container prune*
+
+
+
+### How to create a Docker image
+* Build on top of an existing base container image
+    * Optionally, select a specific version
+* Use a Dockerfile to list all the actions and attributes (see 4.6)
+    * Must be named 'Dockerfile'if a path won't be specified
+    * Steps are executed in the order written
+    * Execute commands directly e.g. *apt-get update*
+    * Expose ports and mount volumes as required
+* Create many containers from same Dockerfile
+* Build: *docker build [OPTIONS] .*
+    * the dot is very important, it tells the build that the Dockerfile is in the local directory!
+* Push to Docker Hub (repo, account required)
+    * Tag the image with username and repo name: *docker image tag [ID] username/reponame:tag*
+    *  Push the image to the repo: *docker image push username/reponame:tag*
+* Pull from repo: *docker image pull imagename*
+
 ## 4.8 Identify application security issues related to secret protection, encryption (storage and transport), and data handling
+
 
 ## 4.9 Explain how firewall, DNS, load balancers, and reverse proxy in application deployment
 
