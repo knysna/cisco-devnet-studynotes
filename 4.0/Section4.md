@@ -154,12 +154,106 @@ EXPOSE 8080
 * Pull from repo: *docker image pull imagename*
 
 ## 4.8 Identify application security issues related to secret protection, encryption (storage and transport), and data handling
+### Secret Protection
+* All interfaces must be secured
+* Protect against man-in-the-middle
+* Protect against phishing (educate users)
+* Secrets must be sufficient;y strong to protect against brute force
+### Encryption
+* Data in motion must be protected by network encryption protocols
+    * HTTPS, SSH
+* Data at rest must be protected by encryption
+    * Database, disk, operating system
+### Data Handling
+* CIA
+* Confidentiality
+* Integrity
+* Availability
 
 
 ## 4.9 Explain how firewall, DNS, load balancers, and reverse proxy in application deployment
+* How they what, sorry?
+### Firewall
+* Screen traffic
+* Control access between zones/systems
+* Stateful vs Stateless
+* Application layer firewall
+* NGFW
+### Load Balancer
+* Distrubute requests across multiple servers
+* Protect individual servers from being overloaded
+* Various methods: round-robin, load-based, IP hash, cookies
+### Reverse Proxy
+* Middle man between user's request and the server - user does not interact directly with server
+* Add in authentication
+* Filter content
+* Cache content
+* Terminate SSL
+
 
 ## 4.10 Describe top OWASP threats (such as XSS, SQL injections, and CSRF)
+* OWASP stands for Open Web Application Security Project
+* Freely available tools and frameworks
+* OWASP top 10: regularly updated public document listing top threats
+1. Injection
+2. Broken authentication
+3. Sensitive data exposure
+4. XML external entities
+5. Broken access control
+6. Security misconfiguration
+7. Cross-site scripting
+8. Insecure deserialization
+9. Using components with known vulnerabilities
+10. Insufficient logging and monitoring
+### XSS
+* Cross site scripting
+* Involves attackers presenting mailicious code to users of compromised sites
+* Used to bypass authentication e.g. by stealing cookies
+### SQL Injection
+* malicious SQL statements are inserted into an entry field for execution 
+* e.g. to dump the database contents to the attacker
+* many sub-types of SQLI
+* Mitigations: WAF, parameterized statements, obejct relational mapper libraries, escaping special characters
+### CSRF
+* Cross Site Request Forgery
+* innocent end user is tricked by an attacker into submitting a web request that they did not intend
+* Attackers who can find a reproducible link that executes a specific action on the target page while the victim is logged in can embed such link on a page they control and trick the victim into opening it
+* Can use auto-running embedded code not requiring user interaction
+
 
 ## 4.11 Utilize Bash commands (file management, directory navigation, and environmental variables)
+* Commands
+    * You should know basic commands like creating, moving and deleting files, etc.
+    * I'm not going to list them all out here
+* Environment variables
+    * set of dynamic named values, stored within the system that are used by applications launched in shells
+    * Systemwide and available to all processes
+    * env, printenv, set, export
+    * echo $TESTVAR
+    * Make persistent by adding to relevant bash config files /etc/...
 
 ## 4.12 Identify the principles of DevOps practices
+* Five Principles
+    * Culture - entire organisation needs to embrace it
+    * Automation - speed up deployment
+    * Lean - reduce waste and streamline processes continuosly
+    * Measurement - of performance, process, people
+    * Sharing - sharing feedback, sharing a common goal
+* Three Ways
+    * Systems and Flow
+        * Make work visible
+        * Reduce batch sizes
+        * Reduce interval sizes
+        * Built in quality
+        * Constantly optimise
+        * Tools: Kanban board, Sprints
+    * Feedback Loops
+        * Amplify feedback to prevent repeat issues
+        * Enable faster detection
+        * Swarm problems until they are fixed
+        * Maximise opportunities to improve and learn
+    * Continuous Experimentation
+        * Disciplined experimentation and risk taking
+        * Defined time to fix issues
+        * No finger pointing for blame
+        * Tools: shared code repositories
