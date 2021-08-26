@@ -53,7 +53,16 @@
 
 
 ## 5.4 Describe the components and benefits of CI/CD pipeline in infrastructure automation
+* Components
+    * Series of automated steps
+    * IDE --> Build --> Test --> Deploy
+    * CI (Continuous Integration) components
+        * Source (git)
+        * Build servers (Jenkins, Travis CI, Drone CI)
 
+* Benefits
+    * Fewer bugs
+    * Automated processes
 
 ## 5.5 Describe principles of infrastructure as code
 
