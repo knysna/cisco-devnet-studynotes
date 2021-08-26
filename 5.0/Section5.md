@@ -75,14 +75,33 @@
     * More stable
 
 ## 5.5 Describe principles of infrastructure as code
+* Attempt by networking industry to bring the benefits of automation to networks (already baked in to newer infra like cloud)
+    * Fewer handcrafted snowflake networks
+    * Ability to roll out additional capacity dynamically and rapidly (elastic)
+* Needs machine-readable code - preferablly in a git repository for version control and rollback
+* Code for new infrastructure and changes can be reviewed by reading a text file 
+* Code can be tested before going into production
+* Desired state (declarative) approach - tell the system what the outcome should be, it can figure out the specific steps by itself
+* Imperative approach - tell the system exactly what commands to run for each step
 
 ## 5.6 Describe the capabilities of automation tools such as Ansible, Puppet, Chef, and Cisco NSO
+* These configuration management tools allow for a fleet of devices to be managed, using infrastructure as code
+* Ansible is commonly used for networks due to good support for legacy devices. Puppet and Chef are more commonly used for server infrastructure as they require agents to be installed.
+* All rely on a runbook/recipe/manifest which contains the instructions
+* NSO - see section 3.2 for many details
 
 ## 5.7 Identify the workflow being automated by a Python script that uses Cisco APIs including ACI, Meraki, Cisco DNA Center, or RESTCONF
+Presumably any question related to this section will have an exhibit to be interpreted.     
+Review your basic Python skills and the specific API sections to prepare.
 
 ## 5.8 Identify the workflow being automated by an Ansible playbook (management packages, user management related to services, basic service configuration, and start/stop)
+Presumably any question related to this section will have an exhibit to be interpreted.     
+Understand the files used by Ansible - inventory, playbook, config snippets. 
+
 
 ## 5.9 Identify the workflow being automated by a bash script (such as file management, app install, user management, directory navigation)
+Presumably any question related to this section will have an exhibit to be interpreted.     
+Review basics of bash scripting.
 
 ## 5.10 Interpret the results of a RESTCONF or NETCONF query
 
