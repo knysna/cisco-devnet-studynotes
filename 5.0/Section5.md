@@ -166,8 +166,13 @@
     * ‘\’ The corresponding lines differ, and only the first line is incomplete. (no newline)
     * ‘/’ The corresponding lines differ, and only the second line is incomplete.  (no newline)
 
-
-
 ## 5.13 Describe the principles and benefits of a code review process
+* See things that unit tests cannot
+* Team inclusion across more projects
+* Improve quality of code, reduce bugs
+* Keep a review checklist so that reviews are always consistent (and add to the checklist as required)
+* Ensure that recommendations are implemented (committed) 
 
 ## 5.14 Interpret sequence diagram that includes API calls
+* Take a diagram and break it down into ordered bullet points
+* Example sequence diagram at https://tyk.io/api-design-methodologies/, compares against other diagram types
