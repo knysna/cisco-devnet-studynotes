@@ -91,23 +91,82 @@
 * NSO - see section 3.2 for many details
 
 ## 5.7 Identify the workflow being automated by a Python script that uses Cisco APIs including ACI, Meraki, Cisco DNA Center, or RESTCONF
-Presumably any question related to this section will have an exhibit to be interpreted.     
-Review your basic Python skills and the specific API sections to prepare.
+* Presumably any question related to this section will have an exhibit to be interpreted.     
+* Review your basic Python skills and the specific API sections to prepare.
 
 ## 5.8 Identify the workflow being automated by an Ansible playbook (management packages, user management related to services, basic service configuration, and start/stop)
-Presumably any question related to this section will have an exhibit to be interpreted.     
-Understand the files used by Ansible - inventory, playbook, config snippets. 
+* Presumably any question related to this section will have an exhibit to be interpreted.     
+* Understand the files used by Ansible - inventory, playbook, config snippets. 
 
 
 ## 5.9 Identify the workflow being automated by a bash script (such as file management, app install, user management, directory navigation)
-Presumably any question related to this section will have an exhibit to be interpreted.     
-Review basics of bash scripting.
+* Presumably any question related to this section will have an exhibit to be interpreted.     
+* Review basics of bash scripting.    
+* https://linuxconfig.org/bash-scripting-tutorial
 
 ## 5.10 Interpret the results of a RESTCONF or NETCONF query
+* Reminders
+    * RESTCONF is an HTTP-based protocol (443)
+    * NETCONF is an SSH based protocol (830 or 22)
+    * While NETCONF uses XML encoding only, RESTCONF supports both JSON and XML
+    * Both use YANG Models
+* Nice NETCONF examples at https://www.juniper.net/documentation/us/en/software/junos/netconf/topics/task/netconf-session-sample.html
+
 
 ## 5.11 Interpret basic YANG models
+* Again we should just need to interpret an exhibit.
+* Nice YANG decription at https://ultraconfig.com.au/blog/learn-yang-full-tutorial-for-beginners/
 
 ## 5.12 Interpret a unified diff
+```
+--- lao	2002-02-21 23:30:39.942229878 -0800
++++ tzu	2002-02-21 23:30:50.442260588 -0800
+@@ -1,7 +1,6 @@
+-The Way that can be told of is not the eternal Way;
+-The name that can be named is not the eternal name.
+ The Nameless is the origin of Heaven and Earth;
+-The Named is the mother of all things.
++The named is the mother of all things.
++
+ Therefore let there always be non-being,
+   so we may see their subtlety,
+ And let there always be being,
+@@ -9,3 +8,6 @@
+ The two are the same,
+ But after they are produced,
+   they have different names.
++They both may be called deep and profound.
++Deeper and more profound,
++The door of all subtleties!
+```
+
+* The header
+```
+--- from-file from-file-modification-time
++++ to-file to-file-modification-time
+```
+
+* The 'hunks'
+```
+@@ from-file-line-numbers to-file-line-numbers @@
+ line-from-either-file
+ line-from-either-file…
+ ```
+
+* ‘+’ A line was added here to the first file.
+* ‘-’ A line was removed here from the first file. 
+
+* When viewing side-by-side diffs:
+    * white space  The corresponding lines are in common. 
+    * ‘|’ The corresponding lines differ, and they are either both complete or both incomplete.
+    * ‘<’ The files differ and only the first file contains the line.
+    * ‘>’ The files differ and only the second file contains the line.
+    * ‘(’ Only the first file contains the line, but the difference is ignored.
+    * ‘)’ Only the second file contains the line, but the difference is ignored.
+    * ‘\’ The corresponding lines differ, and only the first line is incomplete. (no newline)
+    * ‘/’ The corresponding lines differ, and only the second line is incomplete.  (no newline)
+
+
 
 ## 5.13 Describe the principles and benefits of a code review process
 
