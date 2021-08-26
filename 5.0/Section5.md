@@ -57,12 +57,22 @@
     * Series of automated steps
     * IDE --> Build --> Test --> Deploy
     * CI (Continuous Integration) components
-        * Source (git)
+        * Source code (git)
         * Build servers (Jenkins, Travis CI, Drone CI)
+    * Often can use a webhook to notify the build server about new commits
+    * Docker images used for consistent test environment
+        * Can use orchestration tools e.g. Kubernetes
+    * Defined tests that the code must pass
+        * Unit testing, smoke testing, code coverage, adherence to standards
+        * Network tests could use a GNS3/VIRL test network
+    * Separate staging and production environments
 
 * Benefits
     * Fewer bugs
     * Automated processes
+    * Faster turnaround times (release multiple times a day)
+    * Frequent commits - more features
+    * More stable
 
 ## 5.5 Describe principles of infrastructure as code
 
